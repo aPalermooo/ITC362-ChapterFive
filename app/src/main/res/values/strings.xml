@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">chapter_two</string>
+    <string name="app_name">chapter_seven</string>
     <string name="question_text">Canberra is the capital of Australia</string>
     <string name="correct_toast">TRUE</string>
     <string name="incorrect_toast">FALSE</string>
@@ -12,5 +12,11 @@
     <string name="question_africa">The source of the Nile River is in Egypt.</string>
     <string name="question_americas">The Amazon River is the longest river in the Americas.</string>
     <string name="question_asia">Lake Baikal is the world\'s oldest and deepest freshwater lake.</string>
-
+    
+    
+<!--    Chapter 7-->
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_button">Cheat!"</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
 </resources>

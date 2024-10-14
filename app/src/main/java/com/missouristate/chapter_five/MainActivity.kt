@@ -1,8 +1,12 @@
 package com.missouristate.chapter_five
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.missouristate.chapter_five.databinding.ActivityMainBinding
@@ -16,6 +20,17 @@ class MainActivity : AppCompatActivity() {
     private val quizViewModel : QuizViewModel by viewModels()
 
     private lateinit var binding: ActivityMainBinding
+
+    //chapter 7
+    private val cheatLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        //Handle the result
+        if (result.resultCode == Activity.RESULT_OK) {
+            quizViewModel.isCheater =
+                result.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN,false) ?: false
+        }
+    }
 
 //    private val questionBank = listOf(
 //        Question(R.string.question_australia,true),
@@ -61,6 +76,14 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
+        //Chapter 7.1
+        binding.cheatButton.setOnClickListener() {
+            //start CheatActivity
+            val answerIsTrue = quizViewModel.currentQuestionAnswer
+            val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            cheatLauncher.launch(intent)
+        }
+
         updateQuestion()
 
     }
@@ -75,12 +98,12 @@ class MainActivity : AppCompatActivity() {
     private fun checkAnswer (userAnswer:Boolean) {
 //        val correctAnswer = questionBank[currentIndex].answer
         val correctAnswer = quizViewModel.currentQuestionAnswer
-        val messageResId = if (userAnswer == correctAnswer) {
-            R.string.correct
-        } else {
-            R.string.incorrect
+        val messageResId = when {
+            quizViewModel.isCheater -> R.string.judgment_toast
+            userAnswer == correctAnswer -> R.string.correct
+            else -> R.string.incorrect
         }
-
+        Log.d(TAG,"${quizViewModel.isCheater}")
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
     }
 
